@@ -451,13 +451,25 @@ export default function ModelViewer({
   const [autoRotate, setAutoRotate] = useState(true)
   const [rotationSpeed, setRotationSpeed] = useState(0.005)
   
-  // Hotspot data
+  // Hotspot data - Chair-specific hotspots
   const [hotspots, setHotspots] = useState<HotspotData[]>([
     {
-      id: 'demo-1',
-      position: [0, 1, 0],
-      title: 'Feature Point',
-      description: 'This is an interactive hotspot. Click on the model in edit mode to reposition it.'
+      id: 'leather',
+      position: [0.3, 0.6, 0.2],
+      title: 'Leather Upholstery',
+      description: 'Premium aniline leather with beautiful natural patina. The cushions were reupholstered in 1988 using period-correct materials.'
+    },
+    {
+      id: 'shell',
+      position: [-0.4, 0.4, 0],
+      title: 'Molded Plywood Shell',
+      description: 'Bent plywood shell crafted from Danish oak. The natural wood grain and warm finish are hallmarks of mid-century Scandinavian design.'
+    },
+    {
+      id: 'base',
+      position: [0, -0.1, 0.3],
+      title: 'Chrome Swivel Base',
+      description: 'Original 4-star chrome base with 360° swivel mechanism. Still smooth after 60+ years of use.'
     }
   ])
 

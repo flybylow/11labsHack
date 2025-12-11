@@ -1,81 +1,138 @@
-# Second Life Pawn - AI Expert Panel Demo
+# 🏪 Second Life Pawn
 
-Interactive 3D pawn shop with multi-voice AI experts powered by ElevenLabs.
+> **AI-Powered Appraisals** — A 3D pawn shop experience with multi-voice AI experts
 
-![ElevenLabs](https://img.shields.io/badge/ElevenLabs-AI%20Agents-blueviolet) ![React](https://img.shields.io/badge/React-19-blue) ![Three.js](https://img.shields.io/badge/Three.js-r169-green)
+[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-Conversational_AI-blueviolet?style=for-the-badge)](https://elevenlabs.io)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)](https://react.dev)
+[![Three.js](https://img.shields.io/badge/Three.js-black?style=for-the-badge&logo=three.js)](https://threejs.org)
 
-## ✨ The Concept
+---
 
-A 1960s Danish chair in a pawn shop. Four AI experts give their perspective:
+## 👥 Team
 
-| Expert | 🎩 Host | 🔧 Technical Tony | 📜 Historical Emma | 💰 Financial Frank |
-|--------|---------|-------------------|--------------------|--------------------|
-| **Focus** | Introduction | Materials & specs | Provenance & story | Value & market |
+| Name | Role |
+|------|------|
+| **Ward De Muynck** | Developer |
+| **Wolfgang Riegler** | Developer |
+| **Zakaria Chahbar** | Developer |
 
-One ElevenLabs agent, multiple voices. Ask questions, the right expert responds.
+---
+
+## 💡 The Concept
+
+Walk into a virtual pawn shop. Before you sits a beautiful **1960s Danish lounge chair**. 
+
+You want to know more — but who do you ask?
+
+**Four AI experts are ready to help:**
+
+| 🎩 **Host** | 🔧 **Technical Tony** | 📜 **Historical Emma** | 💰 **Financial Frank** |
+|-------------|----------------------|------------------------|------------------------|
+| Welcomes you | Materials & construction | Provenance & story | Value & market |
+
+**One ElevenLabs agent. Four distinct voices. Ask anything.**
+
+---
+
+## ✨ Features
+
+- **🪑 Interactive 3D Viewer** — Rotate, zoom, and explore the chair model
+- **🎤 Voice Conversation** — Talk naturally with AI experts via ElevenLabs
+- **⌨️ Text Input** — Type questions if you prefer
+- **🎯 Smart Routing** — Questions automatically go to the right expert
+- **📍 Interactive Hotspots** — Click points of interest on the model
+- **💾 Save Configurations** — Preserve your hotspot setups
+
+---
 
 ## 🚀 Quick Start
 
 ```bash
-# Install dependencies
+# Clone & install
+git clone https://github.com/flybylow/11labsHack.git
+cd 11labsHack
 npm install
 
-# Set your ElevenLabs Agent ID
-# In src/components/PawnShopConversation.tsx, update AGENT_ID
+# Configure ElevenLabs (create .env file)
+echo "VITE_ELEVENLABS_AGENT_ID=your-agent-id" > .env
+echo "VITE_ELEVENLABS_API_KEY=your-api-key" >> .env
 
-# Start development server
+# Run
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173)
+Open **http://localhost:5173**
 
-## 🎮 Usage
+---
 
-1. **View the Chair** - 3D model auto-rotates with camera controls
-2. **Start Conversation** - Click 🎤 to connect to ElevenLabs
-3. **Ask Questions** - Speak or type:
-   - *"What's it made of?"* → Tony explains materials
-   - *"Where has it been?"* → Emma tells the story
-   - *"What's it worth?"* → Frank gives the value
-4. **Edit Hotspots** - Click Edit Mode to add/position markers
+## 🎮 How It Works
 
-## 📖 Documentation
+1. **View the Chair** — Model auto-rotates; use mouse to orbit/zoom
+2. **Click 🎤 Start** — Connects to ElevenLabs voice AI
+3. **Ask Questions** — Speak or type:
 
-- `/docs/ELEVENLABS_SETUP.md` - Complete agent configuration guide
-- `/docs/DEVELOPER_GUIDE.md` - 3D viewer technical documentation
+| You Ask... | Expert Responds |
+|------------|-----------------|
+| *"What's this made of?"* | 🔧 Tony explains the materials |
+| *"Where did this come from?"* | 📜 Emma tells its story |
+| *"How much is it worth?"* | 💰 Frank gives the valuation |
+| *"Tell me about this chair"* | 🎩 Host gives an overview |
 
-## 🎯 Features
-
-- **3D Model Viewer** - React Three Fiber with GLTF support
-- **Auto-Rotation** - Continuous rotation with speed control
-- **Interactive Hotspots** - 3D positioned annotations
-- **ElevenLabs Integration** - Multi-voice AI conversation
-- **Character Routing** - Automatic expert selection based on question
-- **Voice + Text** - Speak or type your questions
+---
 
 ## 🛠️ Tech Stack
 
-- React 19 + TypeScript
-- React Three Fiber + Drei
-- ElevenLabs React SDK
-- Vite
+| Technology | Purpose |
+|------------|---------|
+| **React 19** | UI Framework |
+| **TypeScript** | Type Safety |
+| **React Three Fiber** | 3D Rendering |
+| **@react-three/drei** | 3D Helpers |
+| **ElevenLabs React SDK** | Voice AI |
+| **Vite** | Build Tool |
+
+---
 
 ## 📁 Project Structure
 
 ```
 src/
 ├── components/
-│   ├── ModelViewer.tsx         # 3D viewer with hotspots
-│   ├── PawnShopConversation.tsx # ElevenLabs integration
-│   ├── DemoModel.tsx           # Built-in demo scene
-│   └── ErrorBoundary.tsx
-├── App.tsx                     # Main layout
-└── types.ts                    # TypeScript interfaces
+│   ├── ModelViewer.tsx          # 3D viewer + hotspots
+│   ├── PawnShopConversation.tsx # ElevenLabs voice integration
+│   ├── DemoModel.tsx            # Fallback demo scene
+│   └── ErrorBoundary.tsx        # Error handling
+├── App.tsx                      # Main app layout
+└── types.ts                     # TypeScript interfaces
 
 public/
-└── CHAIR/                      # 1960s Danish chair model
+└── CHAIR/                       # 3D model assets (GLTF)
+
+docs/
+├── ELEVENLABS_SETUP.md          # Agent configuration guide
+└── DEVELOPER_GUIDE.md           # Technical documentation
 ```
 
 ---
 
-Built for **ElevenLabs AI Agents Hackathon** 🎯
+## 🔧 ElevenLabs Setup
+
+See [`docs/ELEVENLABS_SETUP.md`](docs/ELEVENLABS_SETUP.md) for full instructions.
+
+**Quick version:**
+1. Create agent at [elevenlabs.io/app/conversational-ai](https://elevenlabs.io/app/conversational-ai)
+2. Enable multi-voice with labels: `Tony`, `Emma`, `Frank`
+3. Copy Agent ID and API Key to `.env`
+
+---
+
+## 📄 License
+
+MIT — Built for the **ElevenLabs AI Agents Hackathon** 🎯
+
+---
+
+<p align="center">
+  <strong>🏪 Second Life Pawn</strong><br>
+  <em>Where every item has a story to tell</em>
+</p>

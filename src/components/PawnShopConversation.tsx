@@ -6,10 +6,6 @@ import './PawnShopConversation.css'
 // Get yours at: https://elevenlabs.io/app/conversational-ai
 const AGENT_ID = import.meta.env.VITE_ELEVENLABS_AGENT_ID || ''
 
-// Optional: Only needed if your agent is NOT public
-// For public agents, leave this empty
-const API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY || ''
-
 const isAgentConfigured = AGENT_ID && AGENT_ID !== 'YOUR_AGENT_ID_HERE' && AGENT_ID.length > 10
 
 interface Message {
@@ -88,7 +84,8 @@ export function PawnShopConversation() {
     },
     onError: (error) => {
       console.error('ElevenLabs error:', error)
-      setError(error.message || 'Connection error')
+      const errorMsg = typeof error === 'string' ? error : (error as Error)?.message || 'Connection error'
+      setError(errorMsg)
     },
   })
 
@@ -113,17 +110,12 @@ export function PawnShopConversation() {
       }
       
       await navigator.mediaDevices.getUserMedia({ audio: true })
-      // Start session - API key is optional for public agents
-      const sessionConfig: { agentId: string; overrides?: { apiKey?: string } } = {
+      
+      // Start session with agent ID
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await conversation.startSession({
         agentId: AGENT_ID,
-      }
-      
-      // Add API key if configured (for private agents)
-      if (API_KEY) {
-        sessionConfig.overrides = { apiKey: API_KEY }
-      }
-      
-      await conversation.startSession(sessionConfig)
+      } as any)
     } catch (err) {
       console.error('Failed to start:', err)
       

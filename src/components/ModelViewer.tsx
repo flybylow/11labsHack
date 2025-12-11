@@ -41,10 +41,11 @@ function Annotation({ position, isActive, isEditing, onClick, children }: Annota
     <Html
       position={position}
       center
-      distanceFactor={8}
+      distanceFactor={4}
       zIndexRange={[100, 0]}
       style={{
         pointerEvents: 'auto',
+        transform: 'scale(0.7)',
       }}
     >
       <div

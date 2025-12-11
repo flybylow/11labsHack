@@ -40,14 +40,10 @@ function Annotation({ position, isActive, isEditing, onClick, children }: Annota
   return (
     <Html
       position={position}
-      occlude="blending"
-      transform
-      sprite
-      distanceFactor={3}
+      center
+      distanceFactor={8}
+      zIndexRange={[100, 0]}
       style={{
-        transition: 'all 0.2s',
-        opacity: 1,
-        transform: `scale(${isActive ? 1.2 : 1})`,
         pointerEvents: 'auto',
       }}
     >
@@ -56,6 +52,10 @@ function Annotation({ position, isActive, isEditing, onClick, children }: Annota
         onClick={(e) => {
           e.stopPropagation()
           onClick()
+        }}
+        style={{
+          transform: `scale(${isActive ? 1.1 : 1})`,
+          transition: 'transform 0.2s ease',
         }}
       >
         <div className="annotation-dot" />

@@ -1,0 +1,251 @@
+/* =============================================================================
+   APP CONTAINER
+   ============================================================================= */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #0a0a0f;
+}
+
+/* Pawn Shop Theme */
+.app.pawnshop-theme {
+  --copper: #b87333;
+  --copper-light: #cd853f;
+  --copper-dark: #8b5a2b;
+}
+
+/* =============================================================================
+   APP HEADER
+   ============================================================================= */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(10, 10, 15, 0.98);
+  border-bottom: 1px solid rgba(184, 115, 51, 0.2);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 32px;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #f8f8f7;
+  letter-spacing: 0.02em;
+}
+
+.tagline {
+  font-size: 11px;
+  color: var(--copper);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+/* Model Selector */
+.model-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.model-selector label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.model-selector select {
+  padding: 10px 40px 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(184, 115, 51, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23b87333' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: all 0.2s ease;
+}
+
+.model-selector select:hover {
+  border-color: rgba(184, 115, 51, 0.5);
+  background-color: rgba(184, 115, 51, 0.1);
+}
+
+.model-selector select:focus {
+  outline: none;
+  border-color: var(--copper);
+  box-shadow: 0 0 0 3px rgba(184, 115, 51, 0.15);
+}
+
+.model-selector select option {
+  background: #1a1a1a;
+  color: white;
+  padding: 10px;
+}
+
+/* Model Link */
+.model-link {
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #888;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.model-link:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* =============================================================================
+   APP MAIN
+   ============================================================================= */
+
+.app-main {
+  flex: 1;
+  position: relative;
+  /* Add padding for bottom voice bar */
+  padding-bottom: 80px;
+}
+
+/* =============================================================================
+   LOADING SCREEN
+   ============================================================================= */
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: calc(100vh - 70px);
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+  color: white;
+  gap: 20px;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(184, 115, 51, 0.2);
+  border-top-color: var(--copper);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-screen p {
+  margin: 0;
+  font-size: 16px;
+  color: #888;
+}
+
+/* =============================================================================
+   ERROR FALLBACK
+   ============================================================================= */
+
+.error-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 70px);
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+  text-align: center;
+  padding: 40px;
+}
+
+.error-fallback h2 {
+  margin: 0 0 16px 0;
+  font-size: 28px;
+  color: #f43f5e;
+}
+
+.error-fallback p {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #888;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.error-fallback a {
+  color: var(--copper);
+  text-decoration: none;
+}
+
+.error-fallback a:hover {
+  text-decoration: underline;
+}
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+
+  .logo h1 {
+    font-size: 18px;
+  }
+
+  .model-selector {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .model-selector select {
+    flex: 1;
+    max-width: 200px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .model-link {
+    display: none;
+  }
+}

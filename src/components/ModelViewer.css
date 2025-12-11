@@ -1,0 +1,896 @@
+/* =============================================================================
+   MODEL VIEWER - Main Container
+   ============================================================================= */
+
+.model-viewer {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 68px - 80px); /* Account for header and bottom bar */
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+  overflow: hidden;
+}
+
+.model-viewer.edit-mode {
+  /* Adjust for sidebar */
+}
+
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* =============================================================================
+   CONTROL BAR - Top toolbar
+   ============================================================================= */
+
+.control-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
+  z-index: 1000;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.control-btn {
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e0e0e0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.control-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-color: #8b5cf6;
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.speed-control label {
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.speed-control input[type="range"] {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #8b5cf6;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* =============================================================================
+   ANNOTATION - 3D Hotspot Markers
+   ============================================================================= */
+
+.annotation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.annotation-dot {
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 
+    0 0 0 2px rgba(244, 63, 94, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.3);
+  animation: pulse 2s infinite;
+}
+
+.annotation-label {
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.annotation:hover .annotation-dot {
+  transform: scale(1.2);
+  box-shadow: 
+    0 0 0 4px rgba(244, 63, 94, 0.6),
+    0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.annotation:hover .annotation-label {
+  background: rgba(244, 63, 94, 0.9);
+}
+
+.annotation.active .annotation-dot {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  box-shadow: 
+    0 0 0 4px rgba(99, 102, 241, 0.6),
+    0 4px 20px rgba(99, 102, 241, 0.4);
+  animation: none;
+}
+
+.annotation.active .annotation-label {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.annotation.editing .annotation-dot {
+  background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+  box-shadow: 
+    0 0 0 4px rgba(34, 197, 94, 0.6),
+    0 4px 20px rgba(34, 197, 94, 0.4);
+  animation: pulse-green 1s infinite;
+}
+
+.annotation.editing .annotation-label {
+  background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 2px rgba(244, 63, 94, 0.5),
+      0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 6px rgba(244, 63, 94, 0.3),
+      0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 4px rgba(34, 197, 94, 0.6),
+      0 4px 20px rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 8px rgba(34, 197, 94, 0.3),
+      0 4px 20px rgba(34, 197, 94, 0.4);
+  }
+}
+
+/* =============================================================================
+   FIXED HOTSPOT PANEL - Edit Mode Sidebar
+   ============================================================================= */
+
+.fixed-hotspot-panel {
+  position: absolute;
+  top: 80px;
+  left: 16px;
+  bottom: 16px;
+  width: 320px;
+  background: rgba(15, 15, 25, 0.95);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+
+.add-btn {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+}
+
+.hotspot-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.hotspot-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hotspot-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.hotspot-item.selected {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.hotspot-title {
+  color: #e0e0e0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.delete-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  color: #ef4444;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  transform: scale(1.05);
+}
+
+.empty-message {
+  color: #666;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Hotspot Editor */
+.hotspot-editor {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hotspot-editor h4 {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8b5cf6;
+}
+
+.editor-field {
+  margin-bottom: 14px;
+}
+
+.editor-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.editor-field input[type="text"],
+.editor-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  resize: none;
+  transition: all 0.2s ease;
+}
+
+.editor-field input[type="text"]:focus,
+.editor-field textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.position-editor {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.position-editor h5 {
+  margin: 0 0 14px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.axis-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.axis-control label {
+  width: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6366f1;
+}
+
+.axis-control input[type="range"] {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.axis-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #6366f1;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.axis-control input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.axis-control input[type="number"] {
+  width: 65px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  text-align: right;
+}
+
+.axis-control input[type="number"]:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+/* =============================================================================
+   HOTSPOT INFO PANEL - Click-to-display panel
+   ============================================================================= */
+
+.hotspot-info-panel {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 340px;
+  max-width: calc(100% - 48px);
+  padding: 24px;
+  background: rgba(15, 15, 25, 0.95);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+  /* Positioned above bottom voice bar */
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hotspot-info-panel .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #888;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hotspot-info-panel .close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.hotspot-info-panel h3 {
+  margin: 0 0 12px 0;
+  padding-right: 40px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hotspot-info-panel p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #aaa;
+}
+
+/* =============================================================================
+   SAVE CONFIGURATION PANEL
+   ============================================================================= */
+
+.save-panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.save-panel {
+  position: relative;
+  width: 420px;
+  max-width: calc(100% - 48px);
+  max-height: calc(100% - 48px);
+  padding: 28px;
+  background: rgba(20, 20, 35, 0.98);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.save-panel .close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #888;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-panel .close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.save-panel h3 {
+  margin: 0 0 24px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+
+.save-section {
+  margin-bottom: 28px;
+}
+
+.save-section h4,
+.load-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.save-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.save-input-group input {
+  flex: 1;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+}
+
+.save-input-group input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+}
+
+.save-input-group button {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-input-group button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.save-input-group button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.load-section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.config-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+.config-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.config-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.config-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.config-name {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.config-date {
+  color: #666;
+  font-size: 12px;
+}
+
+.config-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.config-actions button {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.config-actions button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.config-actions button.delete {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.config-actions button.delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* =============================================================================
+   LOADER
+   ============================================================================= */
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: white;
+}
+
+.loader-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader p {
+  margin: 0;
+  font-size: 14px;
+  color: #888;
+}
+
+/* =============================================================================
+   EDIT INSTRUCTIONS
+   ============================================================================= */
+
+.edit-instructions {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: rgba(34, 197, 94, 0.9);
+  border-radius: 30px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+  animation: bounce 2s infinite;
+  z-index: 100;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* =============================================================================
+   ERROR BOUNDARY
+   ============================================================================= */
+
+.error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+}
+
+.error-content {
+  max-width: 400px;
+  padding: 40px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.error-content h2 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  color: #f43f5e;
+}
+
+.error-content p {
+  margin: 0 0 20px 0;
+  color: #888;
+}
+
+.error-content details {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.error-content summary {
+  cursor: pointer;
+  color: #666;
+  font-size: 13px;
+}
+
+.error-content pre {
+  margin-top: 10px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  color: #f43f5e;
+  font-size: 12px;
+  overflow-x: auto;
+}
+
+.error-content button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.error-content button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* =============================================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .control-bar {
+    flex-direction: column;
+    padding: 12px 16px;
+  }
+
+  .control-group {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .fixed-hotspot-panel {
+    width: calc(100% - 32px);
+    left: 16px;
+    right: 16px;
+    bottom: auto;
+    top: 140px;
+    max-height: 300px;
+  }
+
+  .hotspot-info-panel {
+    left: 16px;
+    right: 16px;
+    width: auto;
+  }
+
+  .save-panel {
+    width: calc(100% - 32px);
+    padding: 20px;
+  }
+}
+
